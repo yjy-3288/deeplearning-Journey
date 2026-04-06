@@ -7,7 +7,7 @@
 ## 快速导航
 1. [环境配置标准 SOP (必看)](#环境配置标准-sop)
 2. [学习路线与资源](#学习路线与资源)
-3. [学习日记 (Progress Log)](#训练日记-progress-log)
+3. [学习日记 (Progress Log)](#学习日记-progress-log)
 
 ---
 
@@ -57,7 +57,7 @@
 - [ ] Phase 5: 卷积神经网络 (CNN) 
 - [ ] Phase 6: 伪装场景理解 (文献阅读 + U-Net 复现)
 
-## 训练日记 (Progress Log)
+## 学习日记 (Progress Log)
 
 **Day 1: 破冰**
 -  搭建 GitHub 个人主页。
