@@ -60,12 +60,12 @@
 ## 训练日记 (Progress Log)
 
 **Day 1: 破冰**
-- [x] 搭建 GitHub 个人主页。
-- [x] 配置笔记环境。
-- [x] md文件
+-  搭建 GitHub 个人主页。
+- 配置笔记环境。
+- md文件
 
 **Day 2: 实验环境落成 (2026-04-06)**
-- [x] 理清了 CUDA 驱动与 PyTorch 版本、系统级与环境级 CUDA 的区别。
-- [x] 在 E 盘 成功搭建 cv_env 隔离环境。
-- [x] RTX 4060 成功接入，`torch.cuda.is_available()` 返回 True。
-- [x] 建立了规范化操作体系，不再担心“乱下载”导致的环境崩溃。
+-  理清了 CUDA 驱动与 PyTorch 版本、系统级与环境级 CUDA 的区别。
+-  在 E 盘 成功搭建 cv_env 隔离环境。
+-  RTX 4060 成功接入，`torch.cuda.is_available()` 返回 True。
+- 建立了规范化操作体系，不再担心“乱下载”导致的环境崩溃。
