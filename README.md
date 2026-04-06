@@ -48,7 +48,7 @@
    import torch
    print(torch.cuda.is_available()) # 必须返回 True
    ```
-
+---
 ## 学习路线与资源
 - [ ] Phase 1: 预备知识 (张量、线性代数、自动微分)
 - [ ] Phase 2: 线性神经网络 (线性回归、Softmax)
@@ -56,10 +56,10 @@
 - [ ] Phase 4: 深度学习计算
 - [ ] Phase 5: 卷积神经网络 (CNN) 
 - [ ] Phase 6: 伪装场景理解 (文献阅读 + U-Net 复现)
-
+---
 ## 学习日记 (Progress Log)
 
-**Day 1: 破冰**
+**Day 1:**
 -  搭建 GitHub 个人主页。
 - 配置笔记环境。
 - 了解md文件，并学习其语法与更新个人主页方法
@@ -68,7 +68,7 @@
   >
   >2.可以通过阅读Github网站的md文件学习语法。
 
-**Day 2: 实验环境落成 (2026-04-06)**
+**Day 2:**
 -  理清了 CUDA 驱动与 PyTorch 版本、系统级与环境级 CUDA 的区别。
 -  在 E 盘 成功搭建 cv_env 隔离环境。
 -  RTX 4060 成功接入，`torch.cuda.is_available()` 返回 True。
