@@ -25,7 +25,7 @@
 ### 2. 施工步骤 (Windows + Conda)
 1. **查地基**：`nvidia-smi` 确认 CUDA 支持上限。
 2. **建房间** (E 盘强行隔离)：
-   ```bash
+   ```bash 
    conda create --prefix E:\cv_env python=3.9 -y
    ```
    入驻房间：
