@@ -173,7 +173,7 @@ $$\begin{aligned} f(\mathbf{x}_{new}) &= \mathbf{W}(\mathbf{x} + \mathbf{v}) + \
 ---
 **为什么交叉熵损失先对$o_j$ 求导？（追责机制）**
 
-$$W \xrightarrow{\text{计算}} o_j \xrightarrow{\text{Softmax}} \hat{y}_j \xrightarrow{\text{交叉熵}} l$$
+$$W \xrightarrow{\text{calculate}} o_j \xrightarrow{\text{Softmax}} \hat{y}_j \xrightarrow{\text{交叉熵}} l$$
 
 $$\frac{\partial l}{\partial \mathbf{w}_j} = \frac{\partial l}{\partial o_j} \cdot \frac{\partial o_j}{\partial \mathbf{w}_j} = (\hat{y}_j - y_j) \cdot \mathbf{x}$$
 
