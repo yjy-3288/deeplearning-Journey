@@ -118,6 +118,7 @@
 
 **Day 4:**
 
+---
 **用集合映射的语言来精确描述“softmax回归的输出层是一个全连接层”**
 
 从 $\mathbb{R}^4$ 到 $\mathbb{R}^3$ 的仿射映射：$`f(\mathbf{x}) = \mathbf{W}\mathbf{x} + \mathbf{b}`$
@@ -143,4 +144,8 @@ $$\dim(\text{输入空间}) = \text{rank}(\mathbf{W}) + \dim(\ker(\mathbf{W}))$$
 
 $$\mathbf{W}\mathbf{x}+\mathbf{b}=\mathbf{y}$$
 
-因为我们刚才证明了 $\dim(\ker(\mathbf{W})) \geq 1$，所以一定存在一个非零向量 $\mathbf{v}$ 属于这个核（即 $\mathbf{W}\mathbf{v} = \mathbf{0}$ 且 $\mathbf{v} \neq \mathbf{0}$）。现在，我们构造一个新的输入点：$\mathbf{x}_{new} = \mathbf{x} + \mathbf{v}$。显然，$\mathbf{x}_{new} \neq \mathbf{x}$。但如果我们把 $\mathbf{x}_{new}$ 喂给全连接层：$$\begin{aligned} f(\mathbf{x}_{new}) &= \mathbf{W}(\mathbf{x} + \mathbf{v}) + \mathbf{b} \\ &= \mathbf{W}\mathbf{x} + \mathbf{W}\mathbf{v} + \mathbf{b} \\ &= \mathbf{W}\mathbf{x} + \mathbf{0} + \mathbf{b} \\ &= \mathbf{y} \end{aligned}$$证毕！
+因为我们刚才证明了 $\dim(\ker(\mathbf{W})) \geq 1$，所以一定存在一个非零向量 $`\mathbf{v}`$ 属于这个核（即 $`\mathbf{W}\mathbf{v} = \mathbf{0}`$ 且 $`\mathbf{v} \neq \mathbf{0}`$）。现在，我们构造一个新的输入点：$`\mathbf{x}_{new} = \mathbf{x} + \mathbf{v}`$。显然，$`\mathbf{x}_{new} \neq \mathbf{x}`$。但如果我们把 $`\mathbf{x}_{new}`$ 喂给全连接层：
+$$\begin{aligned} f(\mathbf{x}_{new}) &= \mathbf{W}(\mathbf{x} + \mathbf{v}) + \mathbf{b} \\ &= \mathbf{W}\mathbf{x} + \mathbf{W}\mathbf{v} + \mathbf{b} \\ &= \mathbf{W}\mathbf{x} + \mathbf{0} + \mathbf{b} \\ &= \mathbf{y} \end{aligned}$$
+
+证毕！
+---
