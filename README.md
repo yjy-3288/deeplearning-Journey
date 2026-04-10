@@ -177,6 +177,7 @@ $$W \xrightarrow{\text{calculate}} o_j \xrightarrow{\text{Softmax}} \hat{y}_j \x
 
 $$\frac{\partial l}{\partial \mathbf{w}_j} = \frac{\partial l}{\partial o_j} \cdot \frac{\partial o_j}{\partial \mathbf{w}_j} = (\hat{y}_j - y_j) \cdot \mathbf{x}$$
 
-什么是偏导数？它衡量的是“敏感度”。
+偏导数衡量的是“敏感度”:
+
 如果在反向调查时，发现稍微动一下员工甲的参数，最终的 Loss 就会产生剧烈的波动，说明员工甲就是影响全局的关键节点（根源）。就会被贴上一张数值极大的梯度条子。
 如果动一下员工乙的参数，Loss 根本没什么反应，说明员工乙的错误无关紧要，梯度就会很小.
