@@ -120,4 +120,31 @@
 - **笔记** 
   >**用集合映射的语言来精确描述“softmax回归的输出层是一个全连接层”**
   >
-  >从 $\mathbb{R}^4$ 到 $\mathbb{R}^3$ 的仿射映射：$`f(\mathbf{x}) = \mathbf{W}\mathbf{x} + \mathbf{b}`$`
+  >从 $\mathbb{R}^4$ 到 $\mathbb{R}^3$ 的仿射映射：$`f(\mathbf{x}) = \mathbf{W}\mathbf{x} + \mathbf{b}`$
+  >
+  >**是满射**
+  >
+  >只要这个矩阵的行向量是线性无关的（即行满秩，这在随机初始化的神经网络中发生概率是 100%），这个仿射变换就能覆盖整个 3 维输出空间 $\mathbb{R}^3$
+  >
+  >**proof:不是单射**
+  >
+  >lemma:
+  >
+  >已知
+  >
+  >$$\dim(\text{输入空间}) = \text{rank}(\mathbf{W}) + \dim(\ker(\mathbf{W}))$$
+  >
+  >又因$\text{rank}(\mathbf{W}) \leq 3$,
+  >故$\dim(\ker(\mathbf{W})) \geq 1$
+  >
+  >现证明: 如果 $`\mathbf{x}_1 \neq \mathbf{x}_2`$，则必定 $`f(\mathbf{x}_1) \neq f(\mathbf{x}_2)`$
+  >
+  >假设有一个输入向量 $\mathbf{x}$，它映射到了输出 $\mathbf{y}$：
+  >
+  >$$\mathbf{W}\mathbf{x}+\mathbf{b}=\mathbf{y}$$
+  >
+  >
+  >
+  >
+  >
+  >
