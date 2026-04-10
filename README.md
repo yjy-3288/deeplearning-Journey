@@ -134,8 +134,8 @@
   >
   >$$\dim(\text{输入空间}) = \text{rank}(\mathbf{W}) + \dim(\ker(\mathbf{W}))$$
   >
-  >又因$\text{rank}(\mathbf{W}) \leq 3$,
-  >故$\dim(\ker(\mathbf{W})) \geq 1$
+  >又因$`\text{rank}(\mathbf{W}) \leq 3`$,
+  >故$`\dim(\ker(\mathbf{W})) \geq 1`$
   >
   >现证明: 如果 $`\mathbf{x}_1 \neq \mathbf{x}_2`$，则必定 $`f(\mathbf{x}_1) \neq f(\mathbf{x}_2)`$
   >
