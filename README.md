@@ -117,34 +117,30 @@
   >在训练的数据当中,那个"label"是加过噪声的,而这个噪声服从正态分布(现实中的噪声往往是由无数个微小、独立且随机的干扰因素叠加而成的，而根据中心极限定理，这种“大规模混乱的累加”在宏观上必然会趋向于完美的钟形正态分布)
 
 **Day 4:**
-- **笔记** 
-  >**用集合映射的语言来精确描述“softmax回归的输出层是一个全连接层”**
-  >
-  >从 $\mathbb{R}^4$ 到 $\mathbb{R}^3$ 的仿射映射：$`f(\mathbf{x}) = \mathbf{W}\mathbf{x} + \mathbf{b}`$
-  >
-  >**是满射**
-  >
-  >只要这个矩阵的行向量是线性无关的（即行满秩，这在随机初始化的神经网络中发生概率是 100%），这个仿射变换就能覆盖整个 3 维输出空间 $\mathbb{R}^3$
-  >
-  >**proof:不是单射**
-  >
-  >lemma:
-  >
-  >已知
-  >
-  >$$\dim(\text{输入空间}) = \text{rank}(\mathbf{W}) + \dim(\ker(\mathbf{W}))$$
-  >
-  >又因$`\text{rank}(\mathbf{W}) \leq 3`$,
-  >故$`\dim(\ker(\mathbf{W})) \geq 1`$
-  >
-  >现证明: 如果 $`\mathbf{x}_1 \neq \mathbf{x}_2`$，则必定 $`f(\mathbf{x}_1) \neq f(\mathbf{x}_2)`$
-  >
-  >假设有一个输入向量 $\mathbf{x}$，它映射到了输出 $\mathbf{y}$：
-  >
-  >$$\mathbf{W}\mathbf{x}+\mathbf{b}=\mathbf{y}$$
-  >
-  >
-  >
-  >
-  >
+
+**用集合映射的语言来精确描述“softmax回归的输出层是一个全连接层”**
+
+从 $\mathbb{R}^4$ 到 $\mathbb{R}^3$ 的仿射映射：$`f(\mathbf{x}) = \mathbf{W}\mathbf{x} + \mathbf{b}`$
+
+**是满射**
+
+只要这个矩阵的行向量是线性无关的（即行满秩，这在随机初始化的神经网络中发生概率是 100%），这个仿射变换就能覆盖整个 3 维输出空间 $\mathbb{R}^3$
+  
+**proof:不是单射**
+
+lemma:
+
+已知
+
+$$\dim(\text{输入空间}) = \text{rank}(\mathbf{W}) + \dim(\ker(\mathbf{W}))$$
+
+又因$`\text{rank}(\mathbf{W}) \leq 3`$,
+故$`\dim(\ker(\mathbf{W})) \geq 1`$
+
+现证明: 如果 $`\mathbf{x}_1 \neq \mathbf{x}_2`$，则必定 $`f(\mathbf{x}_1) \neq f\mathbf{x}_2)`$
+
+假设有一个输入向量 $\mathbf{x}$，它映射到了输出 $\mathbf{y}$：
+
 $$\mathbf{W}\mathbf{x}+\mathbf{b}=\mathbf{y}$$
+
+因为我们刚才证明了 $\dim(\ker(\mathbf{W})) \geq 1$，所以一定存在一个非零向量 $\mathbf{v}$ 属于这个核（即 $\mathbf{W}\mathbf{v} = \mathbf{0}$ 且 $\mathbf{v} \neq \mathbf{0}$）。现在，我们构造一个新的输入点：$\mathbf{x}_{new} = \mathbf{x} + \mathbf{v}$。显然，$\mathbf{x}_{new} \neq \mathbf{x}$。但如果我们把 $\mathbf{x}_{new}$ 喂给全连接层：$$\begin{aligned} f(\mathbf{x}_{new}) &= \mathbf{W}(\mathbf{x} + \mathbf{v}) + \mathbf{b} \\ &= \mathbf{W}\mathbf{x} + \mathbf{W}\mathbf{v} + \mathbf{b} \\ &= \mathbf{W}\mathbf{x} + \mathbf{0} + \mathbf{b} \\ &= \mathbf{y} \end{aligned}$$证毕！
