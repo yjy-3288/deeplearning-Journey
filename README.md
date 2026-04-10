@@ -118,4 +118,6 @@
 
 **Day 4:**
 - **笔记** 
-  >1
+  >**用集合映射的语言来精确描述“softmax回归的输出层是一个全连接层”**
+  >
+  >从 $\mathbb{R}^4$ 到 $\mathbb{R}^3$ 的仿射映射：$f(\mathbf{x}) = \mathbf{W}\mathbf{x} + \mathbf{b}$
