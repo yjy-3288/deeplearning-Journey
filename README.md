@@ -147,4 +147,4 @@
   >
   >
   >
-  >
+$$\mathbf{W}\mathbf{x}+\mathbf{b}=\mathbf{y}$$
