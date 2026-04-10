@@ -167,3 +167,16 @@ $$\begin{aligned} f(\mathbf{x}_{new}) &= \mathbf{W}(\mathbf{x} + \mathbf{v}) + \
 
 证毕！
 
+---
+小数连乘会导致数值下溢出,故考虑对数似然,变成连加
+
+---
+**为什么交叉熵损失先对$o_j$ 求导？（追责机制）**
+
+$$W \xrightarrow{\text{计算}} o_j \xrightarrow{\text{Softmax}} \hat{y}_j \xrightarrow{\text{交叉熵}} l$$
+
+$$\frac{\partial l}{\partial \mathbf{w}_j} = \frac{\partial l}{\partial o_j} \cdot \frac{\partial o_j}{\partial \mathbf{w}_j} = (\hat{y}_j - y_j) \cdot \mathbf{x}$$
+
+什么是偏导数？它衡量的是“敏感度”。
+如果在反向调查时，发现稍微动一下员工甲的参数，最终的 Loss 就会产生剧烈的波动，说明员工甲就是影响全局的关键节点（根源）。就会被贴上一张数值极大的梯度条子。
+如果动一下员工乙的参数，Loss 根本没什么反应，说明员工乙的错误无关紧要，梯度就会很小.
