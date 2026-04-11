@@ -271,3 +271,16 @@ def train_epoch_ch3(net, train_iter, loss, updater): #@save
 
 - updater.step()：优化器查看名册，发现名册里有 net[0] 的 $`w,b`$，也有 net[1] 的参数... 于是一把抓，把所有层的参数全都更新了。
 - 清空所有层的梯度，迎接下 32 张图。
+
+**问题:在书中介绍的softmax的net只连接了两层,如果是多层,该如何反向传播？**
+
+假设我们有一个精简版的 3 层神经网络。我们忽略偏置项，用最简单的公式表示它的前向传播（从左到右算答案）：
+
+- 第 1 层： $`A_1 = \sigma(W_1 X)`$   (输入数据 $X$，算出第 1 层输出 $A_1$)
+- 第 2 层： $`A_2 = \sigma(W_2 A_1)`$  (输入 $A_1$，算出第 2 层输出 $A_2$)
+- 第 3 层： $`\hat{Y} = W_3 A_2`$       (输入 $A_2$，算出最终预测结果 $`\hat{Y}`$)最终误差： $`L = \text{Loss}(\hat{Y}, Y)`$
+
+根据微积分链式法则，既然 $W_2$ 影响了 $A_2$，$A_2$ 影响了 $`\hat{Y}`$，$`\hat{Y}`$ 影响了 $L$，我们就把这根链条从右往左反着乘起来：
+
+$$\frac{\partial L}{\partial W_2} = \underbrace{ \frac{\partial L}{\partial \hat{Y}} \cdot \frac{\partial \hat{Y}}{\partial A_2} }_{\text{来自第3层的误差信号}} \cdot \underbrace{ \frac{\partial A_2}{\partial W_2} }_{\text{第2层本身的局部导数}}$$
+
