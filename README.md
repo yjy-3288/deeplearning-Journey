@@ -168,10 +168,10 @@ $$\begin{aligned} f(\mathbf{x}_{new}) &= \mathbf{W}(\mathbf{x} + \mathbf{v}) + \
 证毕！
 
 ---
-小数连乘会导致数值下溢出,故考虑对数似然,变成连加
+小数连乘会导致数值下溢出,故考虑对数似然,变成连加。极大似然估计的目标就是找到一个参数$W^*$使得对数似然函数达到最大,等价于最小化负对数似然(交叉熵损失),而方程没有解析解,因此需要求导算梯度找最优参数.
 
 ---
-**为什么交叉熵损失先对$o_j$ 求导？（追责机制）**
+**为什么交叉熵损失先对$`o_j`$ 求导？（追责机制）**
 
 $$W \xrightarrow{\text{calculate}} o_j \xrightarrow{\text{Softmax}} \hat{y}_j \xrightarrow{\text{交叉熵}} l$$
 
