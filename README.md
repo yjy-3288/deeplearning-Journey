@@ -231,3 +231,44 @@ cross_entropy(y_hat, y)
 此时输出```tensor([2.306,0.6931])```,也就是根据交叉熵损失函数打的分.
 
 当然,可以一次性抽4张照片,或者更多:```y = torch.tensor([0, 2, 0, 1])```。此时打的分数可以是(打比方)```tensor([2.306,0.6931,0.7891,4.1565])```,它里面的每一个数字，都和最初的图片有着极其严密的物理绑定关系
+
+---
+**训练**
+
+定义一个函数来训练一个迭代周期
+```
+def train_epoch_ch3(net, train_iter, loss, updater): #@save
+    """训练模型一个迭代周期（定义见第3章）"""
+    # 将模型设置为训练模式
+    if isinstance(net, torch.nn.Module):
+        net.train()
+    # 训练损失总和、训练准确度总和、样本数
+    metric = Accumulator(3)
+    for X, y in train_iter:
+        # 计算梯度并更新参数
+        y_hat = net(X)
+        l = loss(y_hat, y)
+        if isinstance(updater, torch.optim.Optimizer):
+            # 使用PyTorch内置的优化器和损失函数
+            updater.zero_grad()
+            l.mean().backward()
+            updater.step()
+        else:
+            # 使用定制的优化器和损失函数
+            l.sum().backward()
+            updater(X.shape[0])
+        metric.add(float(l.sum()), accuracy(y_hat, y), y.numel())
+    # 返回训练损失和训练精度
+    return metric[0] / metric[2], metric[1] / metric[2]
+```
+训练循环实际上是这样的：
+
+拿 32 张图 喂进流水线。
+
+图片流过 net[0], net[1], net[2]... 最终吐出预测结果。
+
+算 Loss。backward()：从后往前跑，给每一层（net[0], net[1]...）的参数口袋里都塞进梯度。
+
+updater.step()：优化器查看名册，发现名册里有 net[0] 的 $w,b$，也有 net[1] 的参数... 于是一把抓，把所有层的参数全都更新了。
+
+清空所有层的梯度，迎接下 32 张图。
