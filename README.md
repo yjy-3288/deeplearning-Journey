@@ -228,3 +228,6 @@ def cross_entropy(y_hat, y):
 return- torch.log(y_hat[range(len(y_hat)), y])
 cross_entropy(y_hat, y)
 ```
+此时输出```tensor([2.306,0.6931])```,也就是根据交叉熵损失函数打的分.
+
+当然,可以一次性抽4张照片,或者更多:```y = torch.tensor([0, 2, 0, 1])```。此时打的分数可以是(打比方)```tensor([2.306,0.6931,0.7891,4.1565])```,它里面的每一个数字，都和最初的图片有着极其严密的物理绑定关系
