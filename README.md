@@ -197,4 +197,6 @@ PyTorch 规定的标准图像张量形状是：[通道数 (Channel), 高度 (Hei
 
 ```transforms.Resize(resize)```是用来设定图片的尺寸,如果要"放大",PyTorch 的 Resize 默认使用的是“双线性插值”,将四周的像素加权平均,并填满
 
+```trans=transforms.Copsose(trans)```相当于给trans里的几个动作首尾相连(打包成一个单盒机器)
+
 DataLoader是一个具有延迟加载特点的迭代器
