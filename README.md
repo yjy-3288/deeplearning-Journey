@@ -192,5 +192,7 @@ PyTorch 规定的标准图像张量形状是：[通道数 (Channel), 高度 (Hei
 如果是灰度图（Fashion-MNIST）： 虽然它本质上只是一个二维矩阵，但为了遵守规矩，PyTorch 会强制给它套上一个厚度(通道数)为 1 的“外壳”，把它变成 [1, 28, 28]。
 
 ---
-```
-trans = [transforms.ToTensor()]是动词的集合,其第0个元素是"转化成张量"这个动作.
+
+```trans = [transforms.ToTensor()]```是动词的集合,其第0个元素是"转化成张量"这个动作.
+
+```transforms.Resize(resize)```是用来设定图片的尺寸,如果要"放大",PyTorch 的 Resize 默认使用的是“双线性插值”,将四周的像素加权平均,并填满
