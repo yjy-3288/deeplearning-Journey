@@ -271,7 +271,16 @@ def train_epoch_ch3(net, train_iter, loss, updater): #@save
 - 算 Loss。backward()：从后往前跑，给每一层（net[0], net[1]...）的参数口袋里都塞进梯度。
 
 - updater.step()：优化器查看名册，发现名册里有 net[0] 的 $`w,b`$，也有 net[1] 的参数... 于是一把抓，把所有层的参数全都更新了。
+
 - 清空所有层的梯度，迎接下 32 张图。
+
+
+注: 参数的更新过程如下
+
+$$\mathbf{w}_i^{(\text{new})} = \mathbf{w}_i^{(\text{old})} - \eta \frac{\partial L}{\partial \mathbf{w}_i}$$
+
+$$\mathbf{w}_i^{(\text{new})} = \mathbf{w}_i^{(\text{old})} - \eta (\hat{y}_i - y_i) \mathbf{x}$$
+
 
 ---
 **问题:在书中介绍的softmax的net只连接了两层,如果是多层,该如何反向传播(计算梯度,更新参数)？**
