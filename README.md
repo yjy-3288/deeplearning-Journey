@@ -250,6 +250,7 @@ def train_epoch_ch3(net, train_iter, loss, updater): #@save
         l = loss(y_hat, y)
         if isinstance(updater, torch.optim.Optimizer):
             # 使用PyTorch内置的优化器和损失函数
+            # grad采用累加赋值,
             updater.zero_grad()
             l.mean().backward()
             updater.step()
@@ -272,7 +273,8 @@ def train_epoch_ch3(net, train_iter, loss, updater): #@save
 - updater.step()：优化器查看名册，发现名册里有 net[0] 的 $`w,b`$，也有 net[1] 的参数... 于是一把抓，把所有层的参数全都更新了。
 - 清空所有层的梯度，迎接下 32 张图。
 
-**问题:在书中介绍的softmax的net只连接了两层,如果是多层,该如何反向传播？**
+---
+**问题:在书中介绍的softmax的net只连接了两层,如果是多层,该如何反向传播(计算梯度,更新参数)？**
 
 假设我们有一个精简版的 3 层神经网络。我们忽略偏置项，用最简单的公式表示它的前向传播（从左到右算答案）：
 
@@ -283,4 +285,19 @@ def train_epoch_ch3(net, train_iter, loss, updater): #@save
 根据微积分链式法则，既然 $W_2$ 影响了 $A_2$，$A_2$ 影响了 $`\hat{Y}`$，$`\hat{Y}`$ 影响了 $L$，我们就把这根链条从右往左反着乘起来：
 
 $$\frac{\partial L}{\partial W_2} = \underbrace{ \frac{\partial L}{\partial \hat{Y}} \cdot \frac{\partial \hat{Y}}{\partial A_2} }_{\text{来自第3层的误差信号}} \cdot \underbrace{ \frac{\partial A_2}{\partial W_2} }_{\text{第2层本身的局部导数}}$$
+
+第 2 层在算梯度时，不仅需要上面传下来的 $`\delta_3`$，还需要自己前向传播时的输入数据 $A_1$。这意味着，在数据从左到右流动（做题）的时候，神经网络不能算完即扔！它必须把每一层中间产生的临时结果（激活值）全部像宝藏一样保存在显存里，一直等到反向传播时拿出来用。
+
+这就是为什么层数越多（比如 100 层的 ResNet），训练时我们的显存（VRAM）就越容易爆掉的原因——它在为了反向推导做准备。
+
+---
+**机器求导，真正在起作用的确实是“计算图的拓扑结构（公式联系）”，而那个最终算出来的具体的 Loss 数值（比如 1.34），对于机器算梯度而言，其实并没有那么重要**
+
+**1. 既然靠公式求导，那个具体的 Loss 数值算出来到底有啥用？**
+- 让人类知道模型是否"学崩了"
+- 在部分手动推导的时候,需要知道某偏导的系数
+
+**2. 为什么梯度可以累加？**
+
+$$\frac{\partial L_{\text{total}}}{\partial w} = \frac{1}{n} \left( \frac{\partial l_1}{\partial w} + \frac{\partial l_2}{\partial w} + \dots + \frac{\partial l_{n}}{\partial w} \right)$$
 
