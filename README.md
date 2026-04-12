@@ -165,7 +165,7 @@ $$\begin{aligned} f(\mathbf{x}_{new}) &= \mathbf{W}(\mathbf{x} + \mathbf{v}) + \
 &= \mathbf{W}\mathbf{x} + \mathbf{0} + \mathbf{b} \\ 
 &= \mathbf{y} \end{aligned}$$
 
-证毕！
+证毕！ 
 
 ---
 小数连乘会导致数值下溢出,故考虑对数似然,变成连加。极大似然估计的目标就是找到一个参数$`W^*`$使得对数似然函数达到最大,等价于最小化负对数似然(交叉熵损失),而方程没有解析解,因此需要求导算梯度找最优参数.
