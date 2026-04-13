@@ -310,3 +310,13 @@ $$\frac{\partial L}{\partial W_2} = \underbrace{ \frac{\partial L}{\partial \hat
 
 $$\frac{\partial L_{\text{total}}}{\partial w} = \frac{1}{n} \left( \frac{\partial l_1}{\partial w} + \frac{\partial l_2}{\partial w} + \dots + \frac{\partial l_{n}}{\partial w} \right)$$
 
+**Day 7:**
+
+---
+在多层感知机中，权重成为了一个矩阵
+
+$\mathbf{X}$ (输入数据)： 形状是 $n \times d$。（$n$ 套房子，$d$ 个基础特征）
+
+$\mathbf{W}^{(1)}$ (隐藏层权重)： 形状是 $d \times h$。（$d$ 个基础特征映射到 $h$ 个高级特征）
+
+当它们相乘时（$\mathbf{X}\mathbf{W}^{(1)}$）：根据矩阵乘法规则（中间的 $d$ 抵消），得到的新矩阵 $\mathbf{H}$ 形状必然是 $n \times h$。$\mathbf{H}$ (隐藏层输出)： 形状是 $n \times h$。（$n$ 套房子，每套房子现在被提取出了 $h$ 个高级特征）
