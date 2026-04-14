@@ -438,3 +438,71 @@ $$W_{new} = W_{old} - 学习率 \times 平均梯度$$
 
 - 情况2（输出方差 > 输入方差）：假设我们把权重初始化得太大了，每经过一层，信号被放大了 10%，变成原来的 1.1。经过 100 层后，信号能量变成了 $1.1^{100} \approx 13780$。结果： 传到第 100 层时，信号变得震耳欲聋。数值大到超出了计算机能表示的极限（溢出），所有神经元都被震瘫痪了，输出全变成了 NaN（不是一个数字）。
 
+因此,要求输入输出的数据之间，保持相同的特征对比度。
+
+而为了让输入方差=输出方差,有下面定理.也就是Xavier初始化的原理
+
+---
+**定理**
+
+考虑全连接神经网络中的任意相邻两层。设输入向量为 $`\mathbf{x} \in \mathbb{R}^{n_{\text{in}}}`$，权重矩阵为 $`\mathbf{W} \in \mathbb{R}^{n_{\text{out}} \times n_{\text{in}}}`$，无偏置项，线性输出向量为 $`\mathbf{y} \in \mathbb{R}^{n_{\text{out}}}`$，即 $`\mathbf{y} = \mathbf{W}\mathbf{x}`$。为满足前向传播的方差守恒假设（即 $`\forall i, j, \text{Var}(y_i) = \text{Var}(x_j)`$），权重矩阵 $`\mathbf{W}`$ 的元素 $`w_{ij}`$ 必须从方差为 $`\frac{1}{n_{\text{in}}}`$ 的独立同分布（i.i.d.）中抽取。
+
+**为使证明成立，我们建立以下严格概率论假设：**
+
+1.输入的独立同分布 (i.i.d.)：输入向量的各分量 $`x_1, x_2, \dots, x_{n_{\text{in}}}`$ 是独立同分布的随机变量，且满足 $`\mathbb{E}[x_j] = 0`$，方差恒定 $`\text{Var}(x_j) = \sigma_x^2`$。
+
+2.权重的独立同分布 (i.i.d.)：权重矩阵的各元素 $`w_{ij}`$ 是独立同分布的随机变量，且满足 $`\mathbb{E}[w_{ij}] = 0`$，方差恒定 $`\text{Var}(w_{ij}) = \sigma_w^2`$。（此处引入命题核心）
+
+3.互独立性：输入向量 $`\mathbf{x}`$ 与权重矩阵 $`\mathbf{W}`$ 彼此完全独立。
+
+**Proof**
+
+考察输出向量 $`\mathbf{y}`$ 的第 $`i`$ 个分量 $`y_i`$，其代数表达式为：
+
+$$y_i = \sum_{j=1}^{n_{\text{in}}} w_{ij} x_j$$
+
+对等式两边取方差运算（Variance）：
+
+$$\text{Var}(y_i) = \text{Var}\left( \sum_{j=1}^{n_{\text{in}}} w_{ij} x_j \right)$$
+
+根据假设 1、2 和 3，对于不同的 $`j`$，乘积项 $`(w_{ij} x_j)`$ 彼此相互独立。根据概率论中“独立随机变量和的方差等于方差的和”之引理，求和符号与方差算子可交换：
+
+$$\text{Var}(y_i) = \sum_{j=1}^{n_{\text{in}}} \text{Var}(w_{ij} x_j)$$
+
+接下来，展开单个乘积项的方差 $`\text{Var}(w_{ij} x_j)`$。根据方差定义 $`\text{Var}(Z) = \mathbb{E}[Z^2] - (\mathbb{E}[Z])^2`$：
+
+$$\text{Var}(w_{ij} x_j) = \mathbb{E}[(w_{ij} x_j)^2] - (\mathbb{E}[w_{ij} x_j])^2$$
+
+根据假设 3（$`\mathbf{x}`$ 与 $`\mathbf{W}`$ 独立），两个独立随机变量乘积的期望等于期望的乘积：
+
+$$\mathbb{E}[w_{ij} x_j] = \mathbb{E}[w_{ij}]\mathbb{E}[x_j]$$
+
+由假设 1 和 2（均值皆为 0），上式为：
+
+$$\mathbb{E}[w_{ij}]\mathbb{E}[x_j] = 0 \cdot 0 = 0$$
+
+同样根据独立性，处理平方项的期望 $`\mathbb{E}[(w_{ij} x_j)^2]`$：
+
+$$\mathbb{E}[w_{ij}^2 x_j^2] = \mathbb{E}[w_{ij}^2]\mathbb{E}[x_j^2]$$
+
+由于均值为 0，二阶原点矩即等于方差，即 $`\mathbb{E}[w_{ij}^2] = \text{Var}(w_{ij}) = \sigma_w^2`$，且 $`\mathbb{E}[x_j^2] = \text{Var}(x_j) = \sigma_x^2`$。将其代入单项方差等式：
+
+$$\text{Var}(w_{ij} x_j) = \sigma_w^2 \sigma_x^2 - 0 = \sigma_w^2 \sigma_x^2$$
+
+将此结果代回 $`y_i`$ 的总方差求和公式。注意：正是因为假设 1 和 2 规定了 $`x_j`$ 之间同分布、 $`w_{ij}`$ 之间同分布，$`\sigma_w^2 \sigma_x^2`$ 才成为不依赖于下标 $`j`$ 的常数：
+
+$$\text{Var}(y_i) = \sum_{j=1}^{n_{\text{in}}} (\sigma_w^2 \sigma_x^2) = n_{\text{in}} \sigma_w^2 \sigma_x^2$$
+
+根据我们的终极目标“前向方差守恒”，要求 $`\text{Var}(y_i) = \text{Var}(x_j)`$，即：
+
+$$\sigma_x^2 = n_{\text{in}} \sigma_w^2 \sigma_x^2$$
+
+假设输入信号存在有效信息（$`\sigma_x^2 \neq 0`$），等式两边同时消去 $`\sigma_x^2`$：
+
+$$1 = n_{\text{in}} \sigma_w^2$$
+
+求解得出权重方差的唯一必要条件：
+
+$$\text{Var}(w_{ij}) = \sigma_w^2 = \frac{1}{n_{\text{in}}}$$
+
+Q.E.D.
