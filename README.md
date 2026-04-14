@@ -443,6 +443,7 @@ $$W_{new} = W_{old} - 学习率 \times 平均梯度$$
 而为了让输入方差=输出方差,有下面定理.也就是Xavier初始化的原理
 
 ---
+Xavier初始化是一种初始化权重参数的方法
 **定理**
 
 考虑全连接神经网络中的任意相邻两层。设输入向量为 $`\mathbf{x} \in \mathbb{R}^{n_{\text{in}}}`$，权重矩阵为 $`\mathbf{W} \in \mathbb{R}^{n_{\text{out}} \times n_{\text{in}}}`$，无偏置项，线性输出向量为 $`\mathbf{y} \in \mathbb{R}^{n_{\text{out}}}`$，即 $`\mathbf{y} = \mathbf{W}\mathbf{x}`$。为满足前向传播的方差守恒假设（即 $`\forall i, j, \text{Var}(y_i) = \text{Var}(x_j)`$），权重矩阵 $`\mathbf{W}`$ 的元素 $`w_{ij}`$ 必须从方差为 $`\frac{1}{n_{\text{in}}}`$ 的独立同分布（i.i.d.）中抽取。
