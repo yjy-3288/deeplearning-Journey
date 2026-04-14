@@ -313,7 +313,7 @@ $$\frac{\partial L}{\partial W_2} = \underbrace{ \frac{\partial L}{\partial \hat
 
 $$\frac{\partial L_{\text{total}}}{\partial w} = \frac{1}{n} \left( \frac{\partial l_1}{\partial w} + \frac{\partial l_2}{\partial w} + \dots + \frac{\partial l_{n}}{\partial w} \right)$$
 
-**Day 7:**
+**Day 8:**
 
 ---
 在多层感知机中，权重成为了一个矩阵
@@ -409,7 +409,7 @@ return out
 
 注:不要在输出层后面加Dropout
 
-**Day 8:**
+**Day 9:**
 
 ---
 **训练过程中的批处理是怎么做到的?**
@@ -422,4 +422,4 @@ return out
 
 $$W_{new} = W_{old} - 学习率 \times 平均梯度$$
 
-
+---
