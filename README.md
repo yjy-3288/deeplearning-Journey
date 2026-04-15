@@ -522,3 +522,4 @@ $$\frac{n_{in} + n_{out}}{2} \sigma^2 = 1$$
 
 $$\sigma^2 = \frac{2}{n_{in} + n_{out}}$$
 
+ 
