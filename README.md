@@ -718,19 +718,19 @@ $$\text{Loss} = \frac{1}{n} \sum_{i=1}^{n} \beta_i \cdot l(f(x_i), y_i)$$
 
 $$
 \begin{bmatrix}
-0.80 & 0.10 & 0.05 \\\\
-0.15 & 0.70 & 0.10 \\\\
+0.80 & 0.10 & 0.05 \\
+0.15 & 0.70 & 0.10 \\
 0.05 & 0.20 & 0.85
 \end{bmatrix}
 \begin{bmatrix}
-p(y_A) \\\\
-p(y_B) \\\\
+p(y_A) \\
+p(y_B) \\
 p(y_C)
 \end{bmatrix}
 =
 \begin{bmatrix}
-0.225 \\\\
-0.410 \\\\
+0.225 \\
+0.410 \\
 0.365
 \end{bmatrix}
 $$
