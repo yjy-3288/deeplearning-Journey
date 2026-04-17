@@ -778,3 +778,80 @@ criterion = nn.CrossEntropyLoss(weight=weights)
 块包含层,宏观视角下,块的行为表现就是层
 
 只要是继承了 nn.Module 的类，它既可以是一个最小的“层”，也可以是一个包含很多层的“块”，更可以是由很多块组成的“大模型”。它们在本质上是完全平等的
+
+自定义的块
+```
+import torch
+import torch.nn as nn
+# 定义“块” (把基础层打包)
+class MySimpleBlock(nn.Module):
+    def __init__(self, in_size, out_size):
+        super().__init__()
+        # 在块的内部，采购基础零件
+        self.layer1 = nn.Linear(in_size, out_size)
+        self.relu = nn.ReLU()
+        self.layer2 = nn.Linear(out_size, out_size)
+
+    def forward(self, x):
+        # 定义块内部的流水线
+        x = self.layer1(x)
+        x = self.relu(x)
+        x = self.layer2(x)
+        return x
+```
+官方给的顺序块
+```
+# PyTorch 官方的 nn.Sequential 内部逻辑
+class Sequential(nn.Module):
+    def __init__(self, *args):
+        # *args表示任意多的参数
+        # ... 这里负责把传进来的层存进一个字典里 ...
+        pass
+        
+    def forward(self, x):
+        # 它自动写了一个 for 循环，遍历塞进来的所有零件
+        for module in self._modules.values():
+            x = module(x)  # 上一个层的输出 x，自动变成了下一个层的输入 x
+        return x
+```
+最后会执行
+```
+net = nn.Sequential(
+    MySimpleBlock(10, 32),
+    MySimpleBlock(32, 64),
+    MySimpleBlock(64, 128),
+    MySimpleBlock(128, 256),
+    MySimpleBlock(256, 512)
+)
+```
+myblock是自定义的块的连接方式(依赖于自己需要训练的模型)，而sequential是官方定义的较为简单的模版.forward函数决定了如何定义连接方式
+
+
+---
+**从全连接到卷积**
+
+两个原则:
+- 平移不变性:在不同位置，要找的东西不会发生巨大的特征改变
+- 局部性:找一个目标不需要看得太远,看局部的信息即可
+
+---
+**新的表示形式**
+
+之前做全连接，是把图片拍平，做成一维向量。现在要把它还原成矩阵，因为要考虑空间的信息(比如平移)
+
+传统的一维全连接层 (1D MLP)：为了方便对比，我们不写成矩阵相乘的形式 $`\mathbf{h} = \mathbf{W}\mathbf{x} + \mathbf{b}`$，而是写成标量（单个元素）带下标的形式。假设我们要计算隐藏层中的第 $`i`$ 个神经元的值 $`h_i`$：
+
+$$h_i = b_i + \sum_{j} W_{i,j} x_j$$
+
+保留空间结构的二维全连接层 (D2L 教材公式)：我们要计算隐藏层二维矩阵中，位于第 $`i`$ 行、第 $`j`$ 列的那个神经元的值 $`[\mathbf{H}]_{i,j}`$：
+
+$$[\mathbf{H}]_{i,j} = [\mathbf{U}]_{i,j} + \sum_{k} \sum_{l} [\mathsf{W}]_{i,j,k,l} [\mathbf{X}]_{k,l}$$
+
+| 组成部分 | 传统 1D 公式 | 教材 2D 公式 | 物理意义解释 |
+| :--- | :--- | :--- | :--- |
+| **目标神经元** | $`h_i`$ | $`[\mathbf{H}]_{i,j}`$ | 隐藏层中正在计算的那一个神经元的值。以前通过1个坐标 $(i)$ 就能找到它，现在需要2个坐标 $`(i, j)`$。 |
+| **偏置项 (Bias)** | $`b_i`$ | $`[\mathbf{U}]_{i,j}`$ | 专属这个神经元的固定偏差值。 |
+| **输入来源** | $`x_j`$ | $`[\mathbf{X}]_{k,l}`$ | 输入层中的某一个像素（特征）值。以前在向量里用 $`j`$ 找，现在在图像里用 $`(k, l)`$ 找。 |
+| **“全连接”动作** | $`\sum_{j}`$ | $`\sum_{k} \sum_{l}`$ | “收集所有信息”。一维时遍历整条线（所有 $`j`$）；二维时遍历整个面（所有行 $`k`$ 和所有列 $`l`$）。 |
+| **连接权重** | $`W_{i,j}`$ | $`[\mathsf{W}]_{i,j,k,l}`$ | （最核心的区别）连接“输入来源”与“目标神经元”的这根线上的权重乘数。 |
+
