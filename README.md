@@ -919,4 +919,5 @@ $$[\mathbf{H}]_{i,j,d} = \sum_{a} \sum_{b} \sum_{c} [\mathsf{V}]_{a,b,c,d}[\math
     - $`d`$：决定了它要把提取到的特征写到输出层 $`\mathbf{H}`$ 的哪一页。
 
 
-****
+**Day 12:**
+
