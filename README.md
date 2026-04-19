@@ -921,3 +921,10 @@ $$[\mathbf{H}]_{i,j,d} = \sum_{a} \sum_{b} \sum_{c} [\mathsf{V}]_{a,b,c,d}[\math
 
 **Day 12:**
 
+---
+卷积窗口,输出大小略小于输入大小
+
+$$(n_h - k_h + 1) \times (n_w - k_w + 1)$$
+
+因为滑动窗口会占位置
+
