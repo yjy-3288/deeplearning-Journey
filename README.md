@@ -936,3 +936,46 @@ $$(n_h - k_h + 1) \times (n_w - k_w + 1)$$
 - 卷积层将输入和核矩阵交叉相关，加上偏移后得到输出
 - 核矩阵和偏移是可学习的参数
 - 核矩阵大小是超参数
+
+---
+卷积层代码
+
+作一次前向传播
+```
+class Conv2D(nn.Module):
+    def __init__(self, kernel_size):
+        super().__init__()
+        self.weight = nn.Parameter(torch.rand(kernel_size))
+        self.bias = nn.Parameter(torch.zeros(1))
+    def forward(self, x):
+        return corr2d(x, self.weight) + self.bias
+```
+训练
+```
+# 1. 实例化我们刚才定义的模型
+conv2d = Conv2D(kernel_size=(1, 2))
+
+# 2. 定义一个损失函数（比如均方误差）和一个优化器（比如梯度下降）
+# 优化器需要知道它要更新哪些参数，所以我们把 conv2d.parameters() 传给它
+learning_rate = 0.03
+
+# 3. 开始“训练循环” (这里假设迭代 10 次)
+for i in range(10):
+    # 【正向传播】调用上面类里的 forward 函数，算出预测值
+    Y_hat = conv2d(X)
+    
+    # 【计算损失】对比预测值和真实值 Y，看看差了多少
+    loss = (Y_hat - Y) ** 2 
+    
+    # 【反向传播】这一步最关键！框架会自动算出 loss 对 weight 和 bias 的梯度
+    conv2d.zero_grad() # 清空上一轮的梯度
+    loss.sum().backward() # 自动求导
+    
+    # 【更新参数】根据梯度，更新我们积木里的 weight 和 bias
+    conv2d.weight.data[:] -= learning_rate * conv2d.weight.grad
+    conv2d.bias.data[:] -= learning_rate * conv2d.bias.grad
+    
+    if (i + 1) % 2 == 0:
+        print(f'epoch {i+1}, loss {loss.sum().item():.3f}')
+```
+
