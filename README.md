@@ -971,3 +971,6 @@ for i in range(10):
         print(f'epoch {i+1}, loss {loss.sum().item():.3f}')
 ```
 
+---
+填充(Padding)需要考虑奇偶，以解决非对称导致的图像漂移问题
+
