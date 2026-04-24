@@ -49,11 +49,11 @@
    ```
 ---
 ## 学习路线
-- [x]Phase 1: 预备知识 (张量、线性代数、自动微分)
-- [x]Phase 2: 线性神经网络 (线性回归、Softmax)
-- [x]Phase 3: 多层感知机 
-- [x]Phase 4: 深度学习计算
-- [x]Phase 5: 卷积神经网络 (CNN) 
+- [x] Phase 1: 预备知识 (张量、线性代数、自动微分)
+- [x] Phase 2: 线性神经网络 (线性回归、Softmax)
+- [x] Phase 3: 多层感知机 
+- [x] Phase 4: 深度学习计算
+- [x] Phase 5: 卷积神经网络 (CNN) 
 - Phase 6: 批量规范化 (BatchNorm) & 残差网络 (ResNet)
 - Phase 7: 注意力机制
 - Phase 8: 计算机视觉
