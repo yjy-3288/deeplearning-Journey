@@ -1153,5 +1153,8 @@ $$\hat{y} = \sum_{i=1}^{n} \left( \frac{K(x, x_i)}{\sum_{j=1}^{n} K(x, x_j)} \ri
 
 $$\text{Attention}(\mathbf{Q}, \mathbf{K}, \mathbf{V}) = \text{softmax}\left(\frac{\mathbf{Q}\mathbf{K}^T}{\sqrt{d_k}}\right) \mathbf{V}$$
 
+预测 $`f(x)`$ 时，模型并不会平等地对待所有的 $`y_i`$。它只会把目光（注意力）集中在那些和查询 $`x`$ 距离最近的样本上。距离越近，越受关注；距离远的，直接无视。这就是所谓的“注意力”
+
+
 ---
 注意力的本质不是“拿旧数据预测新数据”,而是“信息的动态重组与特征借用”
