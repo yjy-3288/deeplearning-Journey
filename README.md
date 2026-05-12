@@ -1395,3 +1395,23 @@ z₁ = 权重₁₁·v₁ + 权重₁₂·v₂ + 权重₁₃·v₃
 在之前的 RNN 时代, 我们习惯于“分步走”：先用 Word2Vec 跑出一个有距离感的词向量字典(静态嵌入), 把这个字典固定死(或者微调), 然后再去训练 RNN 的参数. 这给人一种错觉：词嵌入必须先具有“物理意义”, 才能参与后续的网络计算. 
 
 但在现代的 Transformer(以及大多数现代深度学习模型)中, 嵌入矩阵 $`\mathbf{E}`$ 根本不是什么特殊的“外部字典”, 它在数学本质上, 仅仅是整个神经网络的第一层线性权重(Linear Layer)
+
+假设词表大小为 $`V`$（比如 50000），词向量维度为 $`d`$（比如 1024）。当输入一个词（比如“苹果”，索引为 $`k`$）时，我们通常说它是“查表”得到词向量。但在数学计算图中，这等价于：将“苹果”表示为一个长度为 $`V`$ 的独热编码（One-Hot）向量 $`\mathbf{c}_k`$（第 $`k`$ 位是 1，其余是 0）。那么，初始词向量 $`\mathbf{x}`$ 的计算公式其实是：
+
+$$ \mathbf{x} = \mathbf{c}_k \mathbf{E} $$
+
+接着，这个向量进入自注意力层，乘以参数矩阵 $`\mathbf{W}^Q`$ 得到查询向量：
+
+$$ \mathbf{q} = \mathbf{x} \mathbf{W}^Q $$
+
+代入展开，整个过程是一个连续的线性变换（忽略后续的非线性）：
+
+$$ \mathbf{q} = \mathbf{c}_k \mathbf{E} \mathbf{W}^Q $$
+
+在这里，嵌入矩阵$`\mathbf{E}`$ 和 $`\mathbf{W}^Q`$ 地位是完全平等的——它们都是网络中需要学习的参数矩阵。初始化时，它们都是毫无意义的随机数。
+
+反向传播参数更新如下:
+
+$$ \mathbf{W}^Q \leftarrow \mathbf{W}^Q - \eta \frac{\partial \mathcal{L}}{\partial \mathbf{W}^Q} $$
+
+$$ \mathbf{E} \leftarrow \mathbf{E} - \eta \frac{\partial \mathcal{L}}{\partial \mathbf{E}} $$
