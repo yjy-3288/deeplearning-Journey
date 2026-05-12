@@ -1415,3 +1415,43 @@ $$ \mathbf{q} = \mathbf{c}_k \mathbf{E} \mathbf{W}^Q $$
 $$ \mathbf{W}^Q \leftarrow \mathbf{W}^Q - \eta \frac{\partial \mathcal{L}}{\partial \mathbf{W}^Q} $$
 
 $$ \mathbf{E} \leftarrow \mathbf{E} - \eta \frac{\partial \mathcal{L}}{\partial \mathbf{E}} $$
+
+---
+**位置编码**
+
+自注意力因为并行运算放弃了顺序操作, 为了使用顺序信息, 通过输入表示中添加位置编码来注入绝对或相对的位置信息. 
+
+$$Q = \text{Word}_A + \text{PE}_A$$
+
+$$K = \text{Word}_B + \text{PE}_B$$
+
+做点积运算 ($`Q \cdot K^T`$) 时, 分成了四项:
+- $`\text{Word}_A \cdot \text{Word}_B`$ （纯粹的语义匹配度，比如“吃”和“苹果”的匹配度）
+- $`\text{Word}_A \cdot \text{PE}_B`$ （模型会学着忽略这种无意义的交叉）
+- $`\text{PE}_A \cdot \text{Word}_B`$ （同上，通常也会被模型在训练中降级）
+- $`\text{PE}_A \cdot \text{PE}_B`$ （纯粹的位置相似度）
+
+由$`\sin(\alpha)\sin(\beta) + \cos(\alpha)\cos(\beta) = \cos(\alpha - \beta)`$, 如果我们把位置 $`pos_1`$ 和位置 $`pos_2`$ 的两串 512 维的三角函数向量做点积相乘，经过数学抵消，最终的得分，只和它们之间的绝对距离 $`(pos_1 - pos_2)`$ 有关
+
+**离得远就没关系？那跨越半本书的伏笔怎么算？**
+
+得分公式 $`= \mathbf{W}_A \cdot \mathbf{W}_B`$ (语义) $`+ \mathbf{W}_A \cdot \mathbf{PE}_B`$ (交叉) $`+ \mathbf{PE}_A \cdot \mathbf{W}_B`$ (交叉) $`+ \mathbf{PE}_A \cdot \mathbf{PE}_B`$ (距离)
+
+- $`\mathbf{PE}_A \cdot \mathbf{PE}_B`$（距离衰减）： 它只提供了一个“基础的局部偏置”。在人类语言中，相邻的词往往确实有很强的语法联系（比如“吃”后面经常挨着“苹果”），这个项保证了模型不会丧失基础的语法常识。
+- $`\mathbf{W}_A \cdot \mathbf{W}_B`$（语义共鸣）： 当在第 5000 个词看到“他”时，由于“他”的语义向量和第 1 个词“Jack”的语义向量有着极其强烈的匹配度，这个语义内积的得分，会以压倒性的优势，击穿并掩盖掉因为距离遥远而衰减的位置得分
+
+**算出来m-n, 是相对的, 为什么称为绝对位置?**
+
+以 $`\mathbf{W}_A \cdot \mathbf{PE}_n`$ 为例：它是在拿“词 A 的语义本身”去和“位置 $n$ 的绝对三角函数坐标”做内积. 它在一开始，就把一个代表绝对坐标的数字“加”在了词向量上。导致在后续的相乘中，不可避免地产生了这种“语义与绝对坐标绑定的交叉污染”。模型的大脑里依然残留着大量“你在第几号座位”的绝对信息，而不仅仅是“你离我多远”。
+
+**真正的“相对位置编码”——RoPE(旋转位置编码)**
+
+位置信息当成一个旋转矩阵 $`\mathbf{R}`$，去乘在词向量上: 
+- 词 A 变成：$`\mathbf{W}_A \mathbf{R}_m`$
+- 词 B 变成：$`\mathbf{W}_B \mathbf{R}_n`$
+它俩做点积算注意力得分时: 
+
+$$(\mathbf{W}_A \mathbf{R}_m) \cdot (\mathbf{W}_B \mathbf{R}_n) = \mathbf{W}_A \cdot \mathbf{W}_B \cdot \mathbf{R}_{m-n}$$
+
+此时没有交叉项, 结果百分之百只和相对距离 $(m-n)$ 有关
+
