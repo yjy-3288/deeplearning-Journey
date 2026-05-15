@@ -54,8 +54,9 @@
 - [x] Phase 3: 多层感知机 
 - [x] Phase 4: 深度学习计算
 - [x] Phase 5: 卷积神经网络 (CNN) 
-- [x] Phase 6: 批量规范化 (BatchNorm) & 残差网络 (ResNet)
-- Phase 7: 注意力机制
+- [x] Phase 6: 循环神经网络 (RNN)
+- [x] Phase 7: 残差网络 (ResNet)
+- [x] Phase 8: 注意力机制 & Transformer
 
 ---
 ## 学习日记 (Progress Log)
